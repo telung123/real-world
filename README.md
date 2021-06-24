@@ -1,7 +1,9 @@
 # real-world
 
 ## 도입 스택
+
 마크업은 기존 템플릿을 재사용한다. (개발에만 집중)
+
 - axios
 - swr
 - React
@@ -12,10 +14,11 @@
 - eslint
 - prettier
 - (Optional) lodash,
-- (Optional) react-rewired
+- (Optional) react-app-rewired
 - (Optional) husky(+lint-staged)
 
 ## 화면 목록
+
 - 로그인
 - 회원가입
 - 내 담벼락
@@ -24,8 +27,8 @@
 - 게시글 Tag 필터 목록
 - 프로필
 
-
 ## 구현 순서
+
 1. 프로젝트 초기세팅 (dep설정/라우팅 윤곽)
 2. 전체 글목록
 3. 글 상세
@@ -43,7 +46,8 @@
 15. 스켈레톤 UI (Optional)
 
 ## 고려해야 할 사항
+
 - 어떻게해야 잘나올까? 문제가 안생길까? 에 대한 스스로의 고민이 많이 필요
 - 어쨋든 결론적으로 어색한 사용성에 대해 인지하고 잘나와야 함.
 - URL로 바로 접근할 수 있다. (Authorized & Authenticate)
-- SPA에서의 오류처리 (벽돌) -> 어떻게 막을것인가?
+- SPA에서의 오류처리 (벽돌) -> 어떻게 처리할것인가?

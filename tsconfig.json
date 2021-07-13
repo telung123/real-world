@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.path.json",
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -22,7 +23,9 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js"
   ],
   "exclude": [
     "node_modules"

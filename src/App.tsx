@@ -1,4 +1,4 @@
-import routes from 'router'
+import routes from '@/router'
 import React, { ReactElement } from 'react'
 import { Route, Switch } from 'react-router-dom'
 

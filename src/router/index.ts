@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import Home from 'pages/Home'
+import Home from '@/pages/Home'
 import * as routePath from 'router/path'
 
 export interface RouteItem {

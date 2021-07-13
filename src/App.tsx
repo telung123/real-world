@@ -5,9 +5,16 @@ import { Route, Switch } from 'react-router-dom'
 function App(): ReactElement {
   return (
     <Switch>
-      {routes.map((route, index) => (
-        <Route key={index} {...route} exact={route.exact ?? true} />
-      ))}
+      {routes.map(({ component: Component, exact, ...props }, index) => {
+        return (
+          <Route
+            key={index}
+            exact={exact ?? true}
+            render={routeProps => <Component {...routeProps} />}
+            {...props}
+          />
+        )
+      })}
     </Switch>
   )
 }

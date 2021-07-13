@@ -1,7 +1,7 @@
-import Form from '@/pages/Form'
-import Home from '@/pages/Home'
-import Join from '@/pages/Join'
-import Login from '@/pages/Login'
+import Form from '@/pages/form'
+import Home from '@/pages/home'
+import Join from '@/pages/join'
+import Login from '@/pages/login'
 import { RouteItem } from 'router'
 
 export const RouteHome: RouteItem = {

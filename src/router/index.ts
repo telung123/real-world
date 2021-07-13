@@ -1,11 +1,11 @@
 import { FC } from 'react'
-import Home from '@/pages/Home'
+import Home from '@/pages/home'
 import * as routePath from 'router/path'
 
 export interface RouteItem {
   path: string
   exact?: boolean
-  component: FC
+  component: any
 }
 
 const routes: RouteItem[] = [

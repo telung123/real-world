@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout'
-import React, { ReactElement } from 'react'
+import React, { FC } from 'react'
 
-const Login = (): ReactElement => {
+const Login: FC = () => {
   return (
     <Layout>
       <div className="container page-login">

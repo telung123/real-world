@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout'
-import React, { ReactElement } from 'react'
+import React, { FC } from 'react'
 
-const Join = (): ReactElement => {
+const Join: FC = () => {
   return (
     <Layout>
       <div className="container page-join">

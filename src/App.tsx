@@ -1,20 +1,22 @@
 import routes from '@/router'
-import React, { ReactElement } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import React, { FC } from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
-function App(): ReactElement {
+const App: FC = () => {
   return (
     <Switch>
-      {routes.map(({ component: Component, exact, ...props }, index) => {
+      {routes.map(({ component: Component, ...props }, index) => {
         return (
           <Route
             key={index}
-            exact={exact ?? true}
+            exact={true}
+            sensitive={true}
             render={routeProps => <Component {...routeProps} />}
             {...props}
           />
         )
       })}
+      <Redirect to="/" />
     </Switch>
   )
 }

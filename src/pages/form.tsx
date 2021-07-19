@@ -1,6 +1,6 @@
-import React, { ReactElement } from 'react'
+import React, { FC } from 'react'
 
-const Form = (): ReactElement => {
+const Form: FC = () => {
   return (
     <>
       <div className="container page-form">

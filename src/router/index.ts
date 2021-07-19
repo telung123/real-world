@@ -1,6 +1,7 @@
-import { FC } from 'react'
+import Form from '@/pages/form'
 import Home from '@/pages/home'
-import * as routePath from 'router/path'
+import Join from '@/pages/join'
+import Login from '@/pages/login'
 
 export interface RouteItem {
   path: string
@@ -9,8 +10,10 @@ export interface RouteItem {
 }
 
 const routes: RouteItem[] = [
-  ...Object.values(routePath),
-  { path: '*', component: Home },
+  { path: '/login', component: Login },
+  { path: '/join', component: Join },
+  { path: '/article/form', component: Form },
+  { path: '/', component: Home },
 ]
 
 export default routes

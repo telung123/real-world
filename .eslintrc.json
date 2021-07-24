@@ -18,6 +18,7 @@
     }
   },
   "rules": {
+    "no-void": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "jsx-a11y/anchor-is-valid": "off"
   }

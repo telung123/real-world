@@ -9,6 +9,7 @@ import {
   MultipleComments,
   Tags,
 } from './responseTypes'
+import { token } from '@/api/auth'
 
 export const http = axios.create({
   baseURL: process.env.REACT_APP_API_URL,

@@ -1,4 +1,6 @@
 import React, { FC } from 'react'
+import classNames from 'classnames'
+import { Link } from 'react-router-dom'
 
 const Header: FC = () => {
   return (
@@ -17,13 +19,23 @@ const Header: FC = () => {
             </button>
           </div>
           {/* 로그인하지 않은 상태 */}
-          {/* 
-            <ul className="nav">
-              <li><a className="home" href="/">Home</a></li>
-              <li><a href="/login">로그인</a></li>
-              <li><a href="/join">회원가입</a></li>
-            </ul>
-            */}
+
+          <ul className="nav">
+            <li>
+              <Link className="home" to="/">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/login">로그인</Link>
+            </li>
+            <li>
+              <Link to="/join">회원가입</Link>
+            </li>
+          </ul>
+
+          {/* 로그인 후 상태 */}
+          {/*             
           <ul className="nav">
             <li>
               <a className="home" href="/">
@@ -43,7 +55,7 @@ const Header: FC = () => {
             <li>
               <a href="#">로그아웃</a>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </header>
       <div className="dim"></div>

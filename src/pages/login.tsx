@@ -1,13 +1,27 @@
 import Layout from '@/components/layout/Layout'
 import React, { FC } from 'react'
+import { FieldErrors, useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 
 const Login: FC = () => {
+  const { register, handleSubmit } = useForm()
+
+  const onLogin = (data: any): void => {
+    console.log(data)
+  }
+  const onError = (error: FieldErrors): void => {
+    // TODO: 토스트로 변경? Form error 취합
+
+    console.log(error)
+  }
+
   return (
     <Layout>
       <div className="container page-login">
         <div className="common-form">
           <h2 className="form-title">로그인</h2>
-          <form>
+
+          <form onSubmit={handleSubmit(onLogin, onError)}>
             <fieldset>
               <legend>로그인</legend>
               <div className="form-row">
@@ -15,10 +29,9 @@ const Login: FC = () => {
                   <span className="form-head">이메일</span>
                   <input
                     type="email"
-                    name="email"
                     placeholder="이메일"
                     className="txt large block"
-                    value=""
+                    {...register('email', { required: true })}
                   />
                 </label>
               </div>
@@ -27,10 +40,9 @@ const Login: FC = () => {
                   <span className="form-head">비밀번호</span>
                   <input
                     type="password"
-                    name="password"
                     placeholder="비밀번호"
                     className="txt large block"
-                    value=""
+                    {...register('password', { required: true })}
                   />
                 </label>
               </div>
@@ -41,8 +53,9 @@ const Login: FC = () => {
               </div>
             </fieldset>
           </form>
+
           <div className="info-box">
-            처음 오셨나요? <a href="/join">회원가입</a>을 해주세요.
+            처음 오셨나요? <Link to="/join">회원가입</Link>을 해주세요.
           </div>
         </div>
       </div>

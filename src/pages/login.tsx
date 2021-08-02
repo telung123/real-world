@@ -1,3 +1,5 @@
+import { useRequestMap } from '@/api'
+import { token } from '@/api/auth'
 import Layout from '@/components/layout/Layout'
 import React, { FC } from 'react'
 import { FieldErrors, useForm } from 'react-hook-form'
@@ -6,13 +8,20 @@ import { Link } from 'react-router-dom'
 const Login: FC = () => {
   const { register, handleSubmit } = useForm()
 
-  const onLogin = (data: any): void => {
-    console.log(data)
+  const onSubmit = async (formValue: { email: string; password: string }) => {
+    try {
+      const { data } = await useRequestMap.UserLogin({ user: formValue })
+      token(data.token)
+    } catch (e) {
+      // TODO: Error- code분기 (422, 504 ..) 중앙화
+      console.log(e)
+    }
   }
+
   const onError = (error: FieldErrors): void => {
     // TODO: 토스트로 변경? Form error 취합
 
-    console.log(error)
+    console.log('error', error)
   }
 
   return (
@@ -21,7 +30,7 @@ const Login: FC = () => {
         <div className="common-form">
           <h2 className="form-title">로그인</h2>
 
-          <form onSubmit={handleSubmit(onLogin, onError)}>
+          <form onSubmit={handleSubmit(onSubmit, onError)}>
             <fieldset>
               <legend>로그인</legend>
               <div className="form-row">

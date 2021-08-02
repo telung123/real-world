@@ -1,8 +1,6 @@
-import { Jwt } from 'jsonwebtoken'
-
 export interface Users {
   email: string
-  token: Jwt
+  token: string
   username: string
   bio: string
   image: string | null

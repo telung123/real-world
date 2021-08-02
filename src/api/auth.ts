@@ -1,27 +1,19 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { http } from '@/api/index'
-import jwt, { Jwt } from 'jsonwebtoken'
 import { Users } from '@/api/types'
 
 /**
- * @description JWT 토큰 발급
- * @param jwt.sign 토큰에 전달할 Data, 비밀키, option(만료일 등), 콜백함수
+ * @description JWT 토큰 - 쿠키 저장(서버 구현X = httpOnly, secure 적용X)
+ * @param token user email, pw로 인증받은 이후 발급된 token 저장.
  */
-export const token = (payload: Pick<Users, 'email' | 'username'>): void => {
-  jwt.sign(
-    payload,
-    process.env.REACT_APP_SECRET_KEY as string,
-    { expiresIn: '1d' },
-    (err, token) => {
-      if (err) {
-        return console.log(err)
-      }
+export const token = (token: string | null = null): void => {
+  if (token) {
+    Cookies.set('jwt', token)
 
-      // axios default header로 토큰 설정
-      http.defaults.headers.common['Authorization'] = `Token ${token as string}`
-
-      return console.log(token)
-    },
-  )
+    // axios default header로 토큰 설정
+    axios.defaults.headers.common['Authorization'] = `Token ${token}`
+  } else {
+    Cookies.remove('jwt')
+    delete axios.defaults.headers.common['Authorization']
+  }
 }

@@ -11,20 +11,16 @@ import {
 } from './responseTypes'
 import { token } from '@/api/auth'
 
-export const http = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-})
-
 export const useRequestMap = {
   /**
    * @description 사용자 인증 (로그인)
    * @Auth N/A
    */
-  UserLogin: async (data: { email: string; password: string }) => {
-    return await http.request<User>({
+  UserLogin: async (data: { user: { email: string; password: string } }) => {
+    return await axios.request<User>({
       url: '/users/login',
       method: 'post',
-      data: { ...data },
+      data,
     })
   },
 
@@ -37,7 +33,7 @@ export const useRequestMap = {
     email: string
     password: string
   }) => {
-    return await http.request<User>({
+    return await axios.request<User>({
       url: '/users',
       method: 'post',
       data: { ...data },
@@ -88,7 +84,7 @@ export const useRequestMap = {
    * @queryParams username
    */
   FollowUser: async ({ username }: { username: string }) => {
-    return await http.request<Profile>({
+    return await axios.request<Profile>({
       url: `/profiles/${username}/follow`,
       method: 'post',
     })
@@ -155,7 +151,7 @@ export const useRequestMap = {
     data: Pick<Article, 'title' | 'description' | 'body'> &
       Pick<Partial<Article>, 'tagList'>,
   ) => {
-    return await http.request<Article>({
+    return await axios.request<Article>({
       url: `/articles`,
       method: 'post',
       data: { ...data },
@@ -169,7 +165,7 @@ export const useRequestMap = {
   UpdateArticle: async (
     data: Pick<Partial<Article>, 'title' | 'description' | 'body'>,
   ) => {
-    return await http.request<Article>({
+    return await axios.request<Article>({
       url: `/articles`,
       method: 'post',
       data: { ...data },
@@ -206,7 +202,7 @@ export const useRequestMap = {
     slug,
     body,
   }: Pick<Article, 'slug'> & Pick<Comment, 'body'>) => {
-    return await http.request<Comment>({
+    return await axios.request<Comment>({
       url: `/articles/${body}/comments`,
       method: 'post',
     })
@@ -231,7 +227,7 @@ export const useRequestMap = {
    * @Auth Required
    */
   FavoriteArticle: async ({ slug }: Pick<Article, 'slug'>) => {
-    return await http.request<Article>({
+    return await axios.request<Article>({
       url: `/articles/${slug}/favorite`,
       method: 'post',
     })

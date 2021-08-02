@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr'
-import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import { http } from '@/api'
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 
 /**
  * @see https://github.com/vercel/swr/blob/master/examples/axios-typescript/libs/useRequest.ts
@@ -44,7 +43,7 @@ export default function useRequest<Data = unknown, Error = unknown>(
      * function is actually only called by `useSWR` when it isn't.
      */
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    async () => await http(request!),
+    async () => await axios(request!),
     {
       ...config,
       initialData: initialData && {

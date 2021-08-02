@@ -1,13 +1,19 @@
 import { useRequestMap } from '@/api'
 import { Article } from '@/api/responseTypes'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const ArticleList: FC = () => {
   const { data, isLoading, error } = useRequestMap.ArticlesList()
 
+  useEffect(() => {
+    // TODO: 504 error
+    console.log('error', error)
+  }, [error])
+
   const onFavorite = (slug: Pick<Article, 'slug'>): void => {
-    // 인증 처리 추가필요
+    // TODO: 인증 처리 추가필요
+    // 로그인했는지 여부 -> token 확인 ?
     void useRequestMap.FavoriteArticle(slug)
   }
 

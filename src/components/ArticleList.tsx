@@ -1,5 +1,6 @@
 import { useRequestMap } from '@/api'
 import { Article } from '@/api/responseTypes'
+import Loading from '@/components/Loading'
 import React, { FC, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -8,17 +9,29 @@ const ArticleList: FC = () => {
 
   useEffect(() => {
     // TODO: 504 error
+    // eslint-disable-next-line no-debugger
+    // debugger
     console.log('error', error)
   }, [error])
 
-  const onFavorite = (slug: Pick<Article, 'slug'>): void => {
+  const onFavorite = async (slug: Pick<Article, 'slug'>) => {
     // TODO: 인증 처리 추가필요
     // 로그인했는지 여부 -> token 확인 ?
-    void useRequestMap.FavoriteArticle(slug)
+    // eslint-disable-next-line no-debugger
+    await useRequestMap
+      .FavoriteArticle(slug)
+      .then(resolve => {
+        // eslint-disable-next-line no-debugger
+        debugger
+      })
+      .catch(error => {
+        console.log('Error!!', error)
+      })
   }
 
   return (
     <>
+      {isLoading && <Loading />}
       <ul className="article-list">
         {data?.articles?.map((article, i) => {
           const {
@@ -63,7 +76,7 @@ const ArticleList: FC = () => {
               <button
                 type="button"
                 className="btn-like"
-                onClick={() => onFavorite({ slug })}
+                onClick={() => void onFavorite({ slug })}
               >
                 <i className="fas fa-heart"></i>
                 <span className="txt">좋아요</span>

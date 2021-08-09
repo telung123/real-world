@@ -1,6 +1,10 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { Users } from '@/api/types'
+
+const issuedToken = Cookies.get('jwt')
+if (issuedToken) {
+  axios.defaults.headers.common['Authorization'] = `Token ${issuedToken}`
+}
 
 /**
  * @description JWT 토큰 - 쿠키 저장(서버 구현X = httpOnly, secure 적용X)

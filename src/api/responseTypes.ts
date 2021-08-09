@@ -1,9 +1,12 @@
-export interface User {
+export interface UserData {
   email: string
   token: string
   username: string
   bio: string
   image: string | null
+}
+export interface User {
+  user: UserData
 }
 
 export interface Profile {

@@ -1,22 +1,44 @@
 import { useRequestMap } from '@/api'
 import { token } from '@/api/auth'
 import Layout from '@/components/layout/Layout'
-import React, { FC } from 'react'
+import { AxiosError } from 'axios'
+import React, { FC, useCallback, useEffect } from 'react'
 import { FieldErrors, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router'
 
 const Login: FC = () => {
   const { register, handleSubmit } = useForm()
+  const history = useHistory()
+  const { data: userData } = useRequestMap.CurrentUser()
 
-  const onSubmit = async (formValue: { email: string; password: string }) => {
-    try {
-      const { data } = await useRequestMap.UserLogin({ user: formValue })
-      token(data.token)
-    } catch (e) {
-      // TODO: Error- code분기 (422, 504 ..) 중앙화
-      console.log(e)
+  useEffect(() => {
+    if (userData?.user) {
+      history.push('/home')
     }
-  }
+  }, [history, userData])
+
+  const onSubmit = useCallback(
+    async (formValue: { email: string; password: string }) => {
+      await useRequestMap
+        .UserLogin({ user: formValue })
+        .then(response => {
+          token(response.data.user.token)
+        })
+        .catch((error: AxiosError) => {
+          const code = error.response?.status
+          switch (code) {
+            case 422:
+              return alert('이메일/비밀번호를 확인해주세요.')
+            case 504:
+              return alert('일시적 오류입니다.\n잠시후 다시 시도해주세요.')
+            default:
+              break
+          }
+        })
+    },
+    [],
+  )
 
   const onError = (error: FieldErrors): void => {
     // TODO: 토스트로 변경? Form error 취합

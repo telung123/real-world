@@ -2,14 +2,14 @@ import useRequest from '@/hooks/useRequest'
 import axios from 'axios'
 import {
   Article,
-  MultipleArticles,
-  Profile,
-  User,
   Comment,
+  MultipleArticles,
   MultipleComments,
+  Profile,
   Tags,
+  User,
+  UserData,
 } from './responseTypes'
-import { token } from '@/api/auth'
 
 export const useRequestMap = {
   /**
@@ -56,7 +56,7 @@ export const useRequestMap = {
    * @Auth Required
    */
   UpdateUser: (
-    data: Pick<User, 'email' | 'username' | 'bio' | 'image'> & {
+    data: Pick<UserData, 'email' | 'username' | 'bio' | 'image'> & {
       password: string
     },
   ) => {

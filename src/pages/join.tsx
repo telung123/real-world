@@ -1,13 +1,31 @@
 import Layout from '@/components/layout/Layout'
 import React, { FC } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+
+interface FormData {
+  username: string
+  email: string
+  password: string
+}
 
 const Join: FC = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm()
+
+  const onSubmit: SubmitHandler<FormData> = data => {
+    console.log(data)
+  }
+
   return (
     <Layout>
       <div className="container page-join">
         <div className="common-form">
           <h2 className="form-title">회원가입</h2>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <fieldset>
               <div className="form-row">
                 <label>

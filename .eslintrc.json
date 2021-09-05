@@ -21,9 +21,9 @@
     "no-void": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/dot-notation": "warn",
+    "@typescript-eslint/dot-notation": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-dynamic-delete": "warn",
+    "@typescript-eslint/no-dynamic-delete": "off",
     "jsx-a11y/anchor-is-valid": "off"
   }
 }

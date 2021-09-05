@@ -2,28 +2,47 @@ import { useRequestMap } from '@/api'
 import { token } from '@/api/auth'
 import Layout from '@/components/layout/Layout'
 import { AxiosError } from 'axios'
-import React, { FC, useCallback, useEffect } from 'react'
-import { FieldErrors, useForm } from 'react-hook-form'
+import React, { FC, useCallback, useContext, useEffect } from 'react'
+import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
+import { AppContext } from '..'
+
+interface FormData {
+  email: string
+  password: string
+}
 
 const Login: FC = () => {
-  const { register, handleSubmit } = useForm()
+  const { userToken } = useContext(AppContext)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+
   const history = useHistory()
-  const { data: userData } = useRequestMap.CurrentUser()
+  const { data: userData, mutate } = useRequestMap.CurrentUser(userToken)
 
   useEffect(() => {
     if (userData?.user) {
       history.push('/home')
     }
-  }, [history, userData])
+  }, [history, userData?.user])
 
-  const onSubmit = useCallback(
-    async (formValue: { email: string; password: string }) => {
+  const onSubmit: SubmitHandler<FormData> = useCallback(
+    async formValue => {
       await useRequestMap
         .UserLogin({ user: formValue })
         .then(response => {
           token(response.data.user.token)
+          void mutate().then(() => history.push('/'))
         })
         .catch((error: AxiosError) => {
           const code = error.response?.status
@@ -37,14 +56,8 @@ const Login: FC = () => {
           }
         })
     },
-    [],
+    [history, mutate],
   )
-
-  const onError = (error: FieldErrors): void => {
-    // TODO: 토스트로 변경? Form error 취합
-
-    console.log('error', error)
-  }
 
   return (
     <Layout>
@@ -52,7 +65,7 @@ const Login: FC = () => {
         <div className="common-form">
           <h2 className="form-title">로그인</h2>
 
-          <form onSubmit={handleSubmit(onSubmit, onError)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <fieldset>
               <legend>로그인</legend>
               <div className="form-row">
@@ -62,9 +75,19 @@ const Login: FC = () => {
                     type="email"
                     placeholder="이메일"
                     className="txt large block"
-                    {...register('email', { required: true })}
+                    {...register('email', {
+                      validate: {
+                        required: value => value !== '' || '필수 항목입니다.',
+                      },
+                    })}
                   />
                 </label>
+                {errors.email && (
+                  <p className="input-error">
+                    <i className="fas fa-times-circle"></i>{' '}
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
               <div className="form-row">
                 <label>
@@ -73,9 +96,19 @@ const Login: FC = () => {
                     type="password"
                     placeholder="비밀번호"
                     className="txt large block"
-                    {...register('password', { required: true })}
+                    {...register('password', {
+                      validate: {
+                        required: value => value !== '' || '필수 항목입니다.',
+                      },
+                    })}
                   />
                 </label>
+                {errors.password && (
+                  <p className="input-error">
+                    <i className="fas fa-times-circle"></i>{' '}
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
               <div className="form-action">
                 <button type="submit" className="btn large primary">

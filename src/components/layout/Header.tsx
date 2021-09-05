@@ -1,10 +1,38 @@
 import { useRequestMap } from '@/api'
+import { token } from '@/api/auth'
 import Loading from '@/components/Loading'
-import React, { FC } from 'react'
+import { AppContext } from '@/index'
+import React, { FC, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 const Header: FC = () => {
-  const { data: userData, isLoading } = useRequestMap.CurrentUser()
+  const { userToken } = useContext(AppContext)
+  const {
+    data: userData,
+    isValidating,
+    error,
+    mutate,
+  } = useRequestMap.CurrentUser(userToken)
+
+  useEffect(() => {
+    console.log('error', error)
+  }, [error])
+
+  const onLogout = () => {
+    token(null)
+    void mutate()
+
+    // eslint-disable-next-line no-debugger
+    // debugger
+  }
+
+  useEffect(() => {
+    console.log('발급 토큰', userToken)
+  }, [userToken])
+
+  useEffect(() => {
+    console.log('userData', userData)
+  }, [userData])
 
   return (
     <>
@@ -22,7 +50,7 @@ const Header: FC = () => {
             </button>
           </div>
 
-          {isLoading && !userData && <Loading fullCover />}
+          {isValidating && !userData && <Loading fullCover />}
 
           {/* 로그인 후 상태 */}
           {userData && (
@@ -33,17 +61,19 @@ const Header: FC = () => {
                 </a>
               </li>
               <li>
-                <a href="/form">
+                <Link to="/article/form">
                   <i className="far fa-edit"></i> 글등록
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/@dohoons">
+                <Link to={`/@${userData.user.username}`}>
                   <i className="far fa-user"></i> 프로필
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#">로그아웃</a>
+                <a href="#" onClick={onLogout}>
+                  로그아웃
+                </a>
               </li>
             </ul>
           )}

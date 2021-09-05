@@ -11,6 +11,8 @@ import {
   UserData,
 } from './responseTypes'
 
+axios.defaults.baseURL = process.env.REACT_APP_API_URL
+
 export const useRequestMap = {
   /**
    * @description 사용자 인증 (로그인)
@@ -44,11 +46,15 @@ export const useRequestMap = {
    * @description 로그인한 유저 정보
    * @Auth Required
    */
-  CurrentUser: () => {
-    return useRequest<User>({
-      url: '/user',
-      method: 'get',
-    })
+  CurrentUser: (userToken: string | undefined) => {
+    return useRequest<User>(
+      userToken
+        ? {
+            url: '/user',
+            method: 'get',
+          }
+        : null,
+    )
   },
 
   /**
@@ -147,10 +153,10 @@ export const useRequestMap = {
    * @description 본문 생성
    * @Auth Required
    */
-  CreateArticle: async (
-    data: Pick<Article, 'title' | 'description' | 'body'> &
-      Pick<Partial<Article>, 'tagList'>,
-  ) => {
+  CreateArticle: async (data: {
+    article: Pick<Article, 'title' | 'description' | 'body'> &
+      Pick<Partial<Article>, 'tagList'>
+  }) => {
     return await axios.request<Article>({
       url: `/articles`,
       method: 'post',

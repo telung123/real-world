@@ -1,23 +1,13 @@
 import { useRequestMap } from '@/api'
 import { Article } from '@/api/responseTypes'
 import Loading from '@/components/Loading'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 
 const ArticleList: FC = () => {
-  const { data, isLoading, error } = useRequestMap.ArticlesList()
-
-  useEffect(() => {
-    // TODO: 504 error
-    // eslint-disable-next-line no-debugger
-    // debugger
-    console.log('error', error)
-  }, [error])
+  const { data, isLoading } = useRequestMap.ArticlesList()
 
   const onFavorite = async (slug: Pick<Article, 'slug'>) => {
-    // TODO: 인증 처리 추가필요
-    // 로그인했는지 여부 -> token 확인 ?
-    // eslint-disable-next-line no-debugger
     await useRequestMap
       .FavoriteArticle(slug)
       .then(resolve => {

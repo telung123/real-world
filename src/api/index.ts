@@ -1,5 +1,5 @@
 import useRequest from '@/hooks/useRequest'
-import axios from 'axios'
+import { http } from '@/api/auth'
 import {
   Article,
   Comment,
@@ -11,18 +11,16 @@ import {
   UserData,
 } from './responseTypes'
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL
-
 export const useRequestMap = {
   /**
    * @description 사용자 인증 (로그인)
    * @Auth N/A
    */
-  UserLogin: async (data: { user: { email: string; password: string } }) => {
-    return await axios.request<User>({
+  UserLogin: async (data: { email: string; password: string }) => {
+    return await http.request<User>({
       url: '/users/login',
       method: 'post',
-      data,
+      data: { user: data },
     })
   },
 
@@ -35,10 +33,10 @@ export const useRequestMap = {
     email: string
     password: string
   }) => {
-    return await axios.request<User>({
+    return await http.request<User>({
       url: '/users',
       method: 'post',
-      data: { ...data },
+      data: { user: data },
     })
   },
 
@@ -46,9 +44,9 @@ export const useRequestMap = {
    * @description 로그인한 유저 정보
    * @Auth Required
    */
-  CurrentUser: (userToken: string | undefined) => {
+  CurrentUser: (hasToken: string | undefined) => {
     return useRequest<User>(
-      userToken
+      hasToken
         ? {
             url: '/user',
             method: 'get',
@@ -69,7 +67,7 @@ export const useRequestMap = {
     return useRequest<User>({
       url: '/user',
       method: 'put',
-      data: { ...data },
+      data,
     })
   },
 
@@ -90,7 +88,7 @@ export const useRequestMap = {
    * @queryParams username
    */
   FollowUser: async ({ username }: { username: string }) => {
-    return await axios.request<Profile>({
+    return await http.request<Profile>({
       url: `/profiles/${username}/follow`,
       method: 'post',
     })
@@ -121,7 +119,7 @@ export const useRequestMap = {
     return useRequest<MultipleArticles>({
       url: '/articles',
       method: 'get',
-      params: { ...data },
+      params: data,
     })
   },
 
@@ -130,11 +128,11 @@ export const useRequestMap = {
    * @Auth Required
    * @queryParams (페이징에 사용)limit, offset
    */
-  FeedArticlesList: (data: { limit?: number; offset?: number }) => {
+  FeedArticlesList: (params: { limit?: number; offset?: number }) => {
     return useRequest<MultipleArticles>({
       url: '/articles/feed',
       method: 'get',
-      params: { ...data },
+      params,
     })
   },
 
@@ -157,10 +155,10 @@ export const useRequestMap = {
     article: Pick<Article, 'title' | 'description' | 'body'> &
       Pick<Partial<Article>, 'tagList'>
   }) => {
-    return await axios.request<Article>({
+    return await http.request<Article>({
       url: `/articles`,
       method: 'post',
-      data: { ...data },
+      data,
     })
   },
 
@@ -171,10 +169,10 @@ export const useRequestMap = {
   UpdateArticle: async (
     data: Pick<Partial<Article>, 'title' | 'description' | 'body'>,
   ) => {
-    return await axios.request<Article>({
+    return await http.request<Article>({
       url: `/articles`,
       method: 'post',
-      data: { ...data },
+      data,
     })
   },
 
@@ -208,7 +206,7 @@ export const useRequestMap = {
     slug,
     body,
   }: Pick<Article, 'slug'> & Pick<Comment, 'body'>) => {
-    return await axios.request<Comment>({
+    return await http.request<Comment>({
       url: `/articles/${body}/comments`,
       method: 'post',
     })
@@ -233,7 +231,7 @@ export const useRequestMap = {
    * @Auth Required
    */
   FavoriteArticle: async ({ slug }: Pick<Article, 'slug'>) => {
-    return await axios.request<Article>({
+    return await http.request<Article>({
       url: `/articles/${slug}/favorite`,
       method: 'post',
     })

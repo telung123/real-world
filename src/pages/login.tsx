@@ -1,12 +1,11 @@
 import { useRequestMap } from '@/api'
-import { token } from '@/api/auth'
+import { hasToken, token } from '@/api/auth'
 import Layout from '@/components/layout/Layout'
 import { AxiosError } from 'axios'
-import React, { FC, useCallback, useContext, useEffect } from 'react'
-import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import React, { FC, useCallback } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useHistory } from 'react-router'
-import { AppContext } from '..'
+import { Link } from 'react-router-dom'
 
 interface FormData {
   email: string
@@ -14,7 +13,9 @@ interface FormData {
 }
 
 const Login: FC = () => {
-  const { userToken } = useContext(AppContext)
+  const history = useHistory()
+  const { data: userData } = useRequestMap.CurrentUser(hasToken())
+
   const {
     register,
     handleSubmit,
@@ -27,22 +28,13 @@ const Login: FC = () => {
     },
   })
 
-  const history = useHistory()
-  const { data: userData, mutate } = useRequestMap.CurrentUser(userToken)
-
-  useEffect(() => {
-    if (userData?.user) {
-      history.push('/home')
-    }
-  }, [history, userData?.user])
-
   const onSubmit: SubmitHandler<FormData> = useCallback(
     async formValue => {
       await useRequestMap
-        .UserLogin({ user: formValue })
+        .UserLogin(formValue)
         .then(response => {
           token(response.data.user.token)
-          void mutate().then(() => history.push('/'))
+          history.push('/')
         })
         .catch((error: AxiosError) => {
           const code = error.response?.status
@@ -56,8 +48,12 @@ const Login: FC = () => {
           }
         })
     },
-    [history, mutate],
+    [history],
   )
+
+  if (userData) {
+    history.push('/')
+  }
 
   return (
     <Layout>

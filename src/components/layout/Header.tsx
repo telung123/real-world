@@ -1,34 +1,21 @@
 import { useRequestMap } from '@/api'
-import { token } from '@/api/auth'
+import { token, hasToken } from '@/api/auth'
 import Loading from '@/components/Loading'
-import { AppContext } from '@/index'
-import React, { FC, useEffect, useContext } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const Header: FC = () => {
-  const { userToken } = useContext(AppContext)
   const {
     data: userData,
     isValidating,
-    error,
     mutate,
-  } = useRequestMap.CurrentUser(userToken)
+  } = useRequestMap.CurrentUser(hasToken())
 
-  useEffect(() => {
-    console.log('error', error)
-  }, [error])
-
-  const onLogout = () => {
+  const onLogout = (e: React.MouseEvent) => {
+    e.preventDefault()
     token(null)
     void mutate()
-
-    // eslint-disable-next-line no-debugger
-    // debugger
   }
-
-  useEffect(() => {
-    console.log('발급 토큰', userToken)
-  }, [userToken])
 
   useEffect(() => {
     console.log('userData', userData)
@@ -40,9 +27,9 @@ const Header: FC = () => {
       <header className="common-header">
         <div className="wrap">
           <h1 className="logo">
-            <a href="/">
+            <Link to="/">
               <i className="fas fa-globe"></i> World
-            </a>
+            </Link>
           </h1>
           <div className="btn-wrap">
             <button type="button" className="btn-menu">
@@ -56,9 +43,9 @@ const Header: FC = () => {
           {userData && (
             <ul className="nav">
               <li>
-                <a className="home" href="/">
+                <Link to="/" className="home">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
                 <Link to="/article/form">

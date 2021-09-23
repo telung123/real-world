@@ -10,10 +10,7 @@ export interface User {
 }
 
 export interface Profile {
-  username: string
-  bio: string
-  image: string
-  following: boolean
+  profile: Omit<UserData, 'token'>
 }
 
 export interface Author {

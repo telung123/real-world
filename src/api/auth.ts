@@ -1,10 +1,24 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-// export const issuedToken = Cookies.get('jwt')
-// if (issuedToken) {
-//   axios.defaults.headers.common['Authorization'] = `Token ${issuedToken}`
-// }
+export const http = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+})
+
+export const hasToken = () => Cookies.get('jwt')
+
+const issuedToken = hasToken()
+if (issuedToken) {
+  http.interceptors.request.use(config => {
+    config.headers.Authorization = `Token ${issuedToken}`
+    return config
+  })
+} else {
+  http.interceptors.request.use(config => {
+    delete config.headers.Authorization
+    return config
+  })
+}
 
 /**
  * @param token user email, pw로 인증받은 이후 발급된 token.
@@ -12,11 +26,7 @@ import Cookies from 'js-cookie'
 export const token = (token: string | null = null): void => {
   if (token) {
     Cookies.set('jwt', token)
-
-    // axios default header로 토큰 설정
-    axios.defaults.headers.common['Authorization'] = `Token ${token}`
   } else {
     Cookies.remove('jwt')
-    delete axios.defaults.headers.common['Authorization']
   }
 }
